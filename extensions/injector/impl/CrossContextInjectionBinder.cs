@@ -106,5 +106,19 @@ namespace strange.extensions.injector.impl
 				return injector;
 			}
 		}
+
+        public override void Unbind(object key, object name)
+		{
+            IInjectionBinding binding = GetBinding(key, name);
+
+            if (binding != null && 
+                binding.isCrossContext && 
+                CrossContextBinder != null)
+            {
+                CrossContextBinder.Unbind(key, name);
+            }
+
+            base.Unbind(key, name);
+		}
 	}
 }
