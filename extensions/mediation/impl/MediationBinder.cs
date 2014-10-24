@@ -62,6 +62,7 @@ namespace strange.extensions.mediation.impl
 						mapView (view, binding);
 						break;
 					case MediationEvent.DESTROYED:
+                        uninjectViewAndChildren(view);
 						unmapView (view, binding);
 						break;
 					default:
@@ -98,6 +99,26 @@ namespace strange.extensions.mediation.impl
 			}
 			injectionBinder.injector.Inject (mono, false);
 		}
+
+        virtual protected void uninjectViewAndChildren(IView view)
+        {
+            MonoBehaviour mono = view as MonoBehaviour;
+            Component[] views = mono.GetComponentsInChildren(typeof(IView), true) as Component[];
+
+            int aa = views.Length;
+            for (int a = aa - 1; a > -1; a--)
+            {
+                IView iView = views[a] as IView;
+                if (iView != null)
+                {
+                    if (iView.Equals(mono) == false && iView.registeredWithContext)
+                    {
+                        iView.registeredWithContext = false;
+                        Trigger(MediationEvent.DESTROYED, iView);
+                    }
+                }
+            }
+        }
 
 		new public IMediationBinding Bind<T> ()
 		{
