@@ -5,6 +5,8 @@ StrangeIoC.
 v0.7.0
 Just the code.
 
+ISSUES ARE TURNED OFF FOR THIS REPO. PLEASE LOG ANY ISSUES AT THE MAIN STRANGEIOC REPO.
+
 The full StrangeIoC repo is at:
 https://github.com/strangeioc/strangeioc
 
