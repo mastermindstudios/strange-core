@@ -55,6 +55,11 @@ namespace strange.extensions.mediation.impl
 		virtual public void OnRegister()
 		{
 		    _isRegistered = true;
+
+		    if (gameObject != null && gameObject.activeSelf)
+		    {
+		        OnActivate();
+		    }
 		}
 
 		/**
