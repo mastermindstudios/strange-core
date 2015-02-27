@@ -160,7 +160,7 @@ namespace strange.extensions.command.impl
 
 		override public ICommandBinding Bind<T>()
 		{
-			IInjectionBinding binding = injectionBinder.GetBinding<T>();
+			IInjectionBinding binding = injectionBinder.GetBinding(typeof(T));
 			if (binding == null) //If this isn't injected yet, inject a new one as a singleton
 			{
 				injectionBinder.Bind<T>().ToSingleton();
