@@ -32,6 +32,9 @@ namespace strange.extensions.mediation.impl
 {
 	public class View : MonoBehaviour, IView
 	{
+
+	    private Transform _lastParent;
+
 		/// Leave this value true most of the time. If for some reason you want
 		/// a view to exist outside a context you can set it to false. The only
 		/// difference is whether an error gets generated.
@@ -81,11 +84,28 @@ namespace strange.extensions.mediation.impl
 				bubbleToContext(this, true, true);
 		}
 
+	    protected virtual void Update()
+	    {
+            if (autoRegisterWithContext && registeredWithContext)
+	        {
+	            return;
+	        }
+
+	        if (_lastParent != transform.parent)
+	        {
+	            bubbleToContext(this, true, true);    
+	        }
+
+	        _lastParent = transform.parent;
+	    }
+
 		/// A MonoBehaviour OnDestroy handler
 		/// The View will inform the Context that it is about to be
 		/// destroyed.
 		protected virtual void OnDestroy ()
 		{
+		    _lastParent = null;
+
 			bubbleToContext(this, false, false);
 		}
 
@@ -123,21 +143,12 @@ namespace strange.extensions.mediation.impl
 			}
 			if (requiresContext && finalTry)
 			{
-				//last ditch. If there's a Context anywhere, we'll use it!
-				if (Context.firstContext != null)
-				{
-					Context.firstContext.AddView (view);
-					registeredWithContext = true;
-					return;
-				}
-
-				
 				string msg = (loopLimiter == LOOP_MAX) ?
-					msg = "A view couldn't find a context. Loop limit reached." :
-						msg = "A view was added with no context. Views must be added into the hierarchy of their ContextView lest all hell break loose.";
-				msg += "\nView: " + view.ToString();
-				throw new MediationException(msg,
-					MediationExceptionType.NO_CONTEXT);
+					"A view couldn't find a context. Loop limit reached." :
+					"A view was added with no context. Views must be added into the hierarchy of their ContextView lest all hell break loose.";
+				msg += "\nView: " + view;
+
+                Debug.LogWarning(msg);                
 			}
 		}
 	}
