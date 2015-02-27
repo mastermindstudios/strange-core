@@ -163,10 +163,10 @@ namespace strange.extensions.command.impl
 			IInjectionBinding binding = injectionBinder.GetBinding(typeof(T));
 			if (binding == null) //If this isn't injected yet, inject a new one as a singleton
 			{
-				injectionBinder.Bind<T>().ToSingleton();
+				injectionBinder.Bind(typeof(T)).ToSingleton();
 			}
 
-			T signal = (T)injectionBinder.GetInstance<T>();
+			T signal = (T)injectionBinder.GetInstance(typeof(T));
 			return base.Bind(signal);
 		}
 
@@ -174,10 +174,10 @@ namespace strange.extensions.command.impl
 		/// <exception cref="InjectionException">If there is no binding for this type.</exception>
 		public override void Unbind<T>()
 		{
-			ICommandBinding binding = (ICommandBinding) injectionBinder.GetBinding<T>();
+			ICommandBinding binding = (ICommandBinding) injectionBinder.GetBinding(typeof(T));
 			if (binding != null)
 			{
-				T signal = (T) injectionBinder.GetInstance<T>(); 
+				T signal = (T) injectionBinder.GetInstance(typeof(T)); 
 				Unbind(signal, null);
 			}
 		}
