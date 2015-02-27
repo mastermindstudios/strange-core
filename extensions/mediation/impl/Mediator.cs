@@ -34,8 +34,6 @@ namespace strange.extensions.mediation.impl
 		[Inject(ContextKeys.CONTEXT_VIEW)]
 		public GameObject contextView{get;set;}
 
-	    private bool _isRegistered;
-
 		public Mediator ()
 		{
 		}
@@ -54,7 +52,6 @@ namespace strange.extensions.mediation.impl
 		 */
 		virtual public void OnRegister()
 		{
-		    _isRegistered = true;
 		}
 
 		/**
@@ -64,37 +61,7 @@ namespace strange.extensions.mediation.impl
 		 */
 		virtual public void OnRemove()
 		{
-		    if (_isRegistered)
-		    {
-		        OnDeactivate();
-		    }
 		}
-
-	    protected virtual void OnActivate()
-	    {
-            
-	    }
-
-        protected virtual void OnDeactivate()
-	    {
-	        
-	    }
-
-        protected virtual void OnEnable()
-        {
-            if (_isRegistered)
-            {
-                OnActivate();
-            }
-        }
-
-        protected void OnDisable()
-        {
-            if (_isRegistered)
-            {
-                OnDeactivate();
-            }
-        }
 	}
 }
 
