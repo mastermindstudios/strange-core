@@ -87,13 +87,15 @@ namespace strange.extensions.mediation.impl
 				IView iView = views[a] as IView;
 				if (iView != null)
 				{
-					if (iView.autoRegisterWithContext && iView.registeredWithContext)
-					{
-						continue;
-					}
+                    // even though a view might be registered with the context, it's bindings might be setup yet so we need
+                    // to call awake
+				    if (iView.Equals(mono) == false)
+				    {
+				        Trigger(MediationEvent.AWAKE, iView);
+				    }
+
 					iView.registeredWithContext = true;
-					if (iView.Equals(mono) == false)
-						Trigger (MediationEvent.AWAKE, iView);
+					
 				}
 			}
 			injectionBinder.injector.Inject (mono, false);
