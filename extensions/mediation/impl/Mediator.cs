@@ -22,6 +22,7 @@
  * @see strange.extensions.mediation.api.IMediationBinder
  */
 
+using mastermind.core.util;
 using strange.extensions.context.api;
 using strange.extensions.mediation.api;
 using UnityEngine;
@@ -34,8 +35,9 @@ namespace strange.extensions.mediation.impl
 		[Inject(ContextKeys.CONTEXT_VIEW)]
 		public GameObject contextView{get;set;}
 
+        private bool _isActivated;
 	    private bool _isRegistered;
-
+	    
 		public Mediator ()
 		{
 		}
@@ -55,6 +57,8 @@ namespace strange.extensions.mediation.impl
 		virtual public void OnRegister()
 		{
 		    _isRegistered = true;
+
+            TryActivate();
 		}
 
 		/**
@@ -64,37 +68,46 @@ namespace strange.extensions.mediation.impl
 		 */
 		virtual public void OnRemove()
 		{
-		    if (_isRegistered)
-		    {
-		        OnDeactivate();
-		    }
+            TryDeactivate();
 		}
 
 	    protected virtual void OnActivate()
 	    {
-            
 	    }
 
         protected virtual void OnDeactivate()
-	    {
-	        
-	    }
+        {
+        }
 
         protected virtual void OnEnable()
         {
-            if (_isRegistered)
-            {
-                OnActivate();
-            }
+            TryActivate();
         }
 
         protected void OnDisable()
         {
-            if (_isRegistered)
-            {
-                OnDeactivate();
-            }
+            TryDeactivate();
         }
+
+	    private void TryActivate()
+	    {
+            if (gameObject != null && gameObject.activeInHierarchy && !_isActivated && !Application.isLoadingLevel)
+            {
+                Logger.Error("calling activate: " + this);
+                OnActivate();
+                _isActivated = true;
+            }
+	    }
+
+	    private void TryDeactivate()
+	    {
+            if (_isRegistered && _isActivated)
+            {
+                Logger.Error("calling deactivate: " + this);
+                OnDeactivate();
+                _isActivated = false;
+            }
+	    }
 	}
 }
 
