@@ -313,7 +313,10 @@ namespace strange.extensions.context.impl
 		
 		override public void RemoveView(object view)
 		{
-			mediationBinder.Trigger(MediationEvent.DESTROYED, view as IView);
+		    if (mediationBinder != null)
+		    {
+                mediationBinder.Trigger(MediationEvent.DESTROYED, view as IView);    
+		    }
 		}
 
 		/// Caches early-riser Views.
