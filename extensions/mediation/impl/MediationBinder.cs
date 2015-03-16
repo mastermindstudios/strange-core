@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections;
+using mastermind.core.util;
 using UnityEngine;
 using strange.extensions.injector.api;
 using strange.extensions.mediation.api;
@@ -129,6 +130,12 @@ namespace strange.extensions.mediation.impl
 					{
 						throw new MediationException(viewType + "mapped to itself. The result would be a stack overflow.", MediationExceptionType.MEDIATOR_VIEW_STACK_OVERFLOW);
 					}
+
+				    if (mono.gameObject.GetComponent(mediatorType) != null)
+				    {
+                        // since awake can potentially be called multiple times, don't add the mediator component twice
+                        return;
+				    }
 					MonoBehaviour mediator = mono.gameObject.AddComponent(mediatorType) as MonoBehaviour;
 					if (mediator == null)
 						throw new MediationException ("The view: " + viewType.ToString() + " is mapped to mediator: " + mediatorType.ToString() + ". AddComponent resulted in null, which probably means " + mediatorType.ToString().Substring(mediatorType.ToString().LastIndexOf(".")+1) + " is not a MonoBehaviour.", MediationExceptionType.NULL_MEDIATOR);

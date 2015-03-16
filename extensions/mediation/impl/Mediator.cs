@@ -22,58 +22,57 @@
  * @see strange.extensions.mediation.api.IMediationBinder
  */
 
-using mastermind.core.util;
 using strange.extensions.context.api;
 using strange.extensions.mediation.api;
 using UnityEngine;
 
 namespace strange.extensions.mediation.impl
 {
-	public class Mediator : MonoBehaviour, IMediator
-	{
+    public class Mediator : MonoBehaviour, IMediator
+    {
 
-		[Inject(ContextKeys.CONTEXT_VIEW)]
-		public GameObject contextView{get;set;}
+        [Inject(ContextKeys.CONTEXT_VIEW)]
+        public GameObject contextView { get; set; }
 
         private bool _isActivated;
-	    private bool _isRegistered;
-	    
-		public Mediator ()
-		{
-		}
+        private bool _isRegistered;
 
-		/**
-		 * Fires directly after creation and before injection
-		 */
-		virtual public void PreRegister()
-		{
-		}
+        public Mediator()
+        {
+        }
 
-		/**
-		 * Fires after all injections satisifed.
-		 *
-		 * Override and place your initialization code here.
-		 */
-		virtual public void OnRegister()
-		{
-		    _isRegistered = true;
+        /**
+         * Fires directly after creation and before injection
+         */
+        virtual public void PreRegister()
+        {
+        }
+
+        /**
+         * Fires after all injections satisifed.
+         *
+         * Override and place your initialization code here.
+         */
+        virtual public void OnRegister()
+        {
+            _isRegistered = true;
 
             TryActivate();
-		}
+        }
 
-		/**
-		 * Fires on removal of view.
-		 *
-		 * Override and place your cleanup code here
-		 */
-		virtual public void OnRemove()
-		{
+        /**
+         * Fires on removal of view.
+         *
+         * Override and place your cleanup code here
+         */
+        virtual public void OnRemove()
+        {
             TryDeactivate();
-		}
+        }
 
-	    protected virtual void OnActivate()
-	    {
-	    }
+        protected virtual void OnActivate()
+        {
+        }
 
         protected virtual void OnDeactivate()
         {
@@ -89,25 +88,23 @@ namespace strange.extensions.mediation.impl
             TryDeactivate();
         }
 
-	    private void TryActivate()
-	    {
-            if (gameObject != null && gameObject.activeInHierarchy && !_isActivated && _isRegistered && !Application.isLoadingLevel)
+        private void TryActivate()
+        {
+            if (gameObject != null && gameObject.activeInHierarchy && !_isActivated && _isRegistered)
             {
-                Logger.Error("calling activate: " + this);
-                OnActivate();
                 _isActivated = true;
+                OnActivate();
             }
-	    }
+        }
 
-	    private void TryDeactivate()
-	    {
+        private void TryDeactivate()
+        {
             if (_isRegistered && _isActivated)
             {
-                Logger.Error("calling deactivate: " + this);
                 OnDeactivate();
                 _isActivated = false;
             }
-	    }
-	}
+        }
+    }
 }
 
