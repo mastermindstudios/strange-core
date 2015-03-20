@@ -357,7 +357,10 @@ namespace strange.extensions.context.impl
 		public override void OnRemove()
 		{
 			base.OnRemove();
-			commandBinder.OnRemove();
+		    if (commandBinder != null)
+		    {
+		        commandBinder.OnRemove();
+		    }
 		}
 	}
 }
