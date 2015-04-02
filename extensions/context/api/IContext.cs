@@ -37,7 +37,13 @@ namespace strange.extensions.context.api
 
 		/// Fires ContextEvent.START (or the equivalent Signal) to launch the application
 		void Launch();
-		
+
+        /// Set up active-context properties
+	    void Activate();
+
+        /// Clean up active-context properties
+	    void Deactivate();
+
 		/// Register a new context to this one
 		IContext AddContext(IContext context);
 		

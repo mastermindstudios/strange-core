@@ -112,7 +112,17 @@ namespace strange.extensions.context.impl
 		virtual public void Launch()
 		{
 		}
-		
+
+        /// Call this to set up active-context specific
+	    virtual public void Activate()
+	    {
+	    }
+
+        /// Call this to clean up active-context specific
+	    virtual public void Deactivate()
+	    {
+	    }
+
 		/// Override to map project-specific bindings
 		virtual protected void mapBindings()
 		{
