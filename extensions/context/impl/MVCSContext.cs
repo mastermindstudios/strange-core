@@ -155,15 +155,14 @@
  * 
  */
 
-using strange.extensions.implicitBind.api;
-using strange.extensions.implicitBind.impl;
-using UnityEngine;
 using strange.extensions.command.api;
 using strange.extensions.command.impl;
 using strange.extensions.context.api;
 using strange.extensions.dispatcher.api;
 using strange.extensions.dispatcher.eventdispatcher.api;
 using strange.extensions.dispatcher.eventdispatcher.impl;
+using strange.extensions.implicitBind.api;
+using strange.extensions.implicitBind.impl;
 using strange.extensions.injector.api;
 using strange.extensions.mediation.api;
 using strange.extensions.mediation.impl;
@@ -171,6 +170,7 @@ using strange.extensions.sequencer.api;
 using strange.extensions.sequencer.impl;
 using strange.framework.api;
 using strange.framework.impl;
+using UnityEngine;
 
 namespace strange.extensions.context.impl
 {
@@ -327,11 +327,15 @@ namespace strange.extensions.context.impl
 		/// until the Context is ready to mediate them.
 		virtual protected void cacheView(MonoBehaviour view)
 		{
-			if (viewCache.constraint.Equals(BindingConstraintType.ONE))
-			{
-				viewCache.constraint = BindingConstraintType.MANY;
-			}
-			viewCache.Add(view);
+            // TR - since we're preloading scenes, any view that's in that scene when loaded will try to register itself
+            // to this static view cache. since we're not activating contexts automatically, that view won't have the proper context initialized
+            // when the first context is activated. for example, when home is activated for the first time, it will try to populate the view cache 
+            // for other views that got added during preload. commenting out for now because we're relying on manual activation
+            //if (viewCache.constraint.Equals(BindingConstraintType.ONE))
+            //{
+            //    viewCache.constraint = BindingConstraintType.MANY;
+            //}
+            //viewCache.Add(view);
 		}
 
 		/// Provide mediation for early-riser Views
